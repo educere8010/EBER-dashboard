@@ -55,16 +55,18 @@
         .fold-caret{font-size:11px;opacity:.8}
         .fold-group{display:none}
         .fold-group.open{display:block}
+        .nav-ext-row{display:flex;gap:6px}
+        .nav-ext-row .nav-ext{flex:1;min-width:0;padding:10px 10px;font-size:12.5px;white-space:nowrap}
       </style>
       <div class="nav-label">매일 기록</div>
       <button class="active" data-page="dashboard">◫ 종합현황</button><button data-page="attendance">✓ 오늘의 출결</button><button data-page="study">▤ 학습계획·점검</button><button data-page="tasks">☑ 할 일·알림</button>
       <div class="nav-label">학생·상담</div>
       <button data-page="student360">◉ 학생 종합기록</button><button data-page="students">♙ 재원생 관리</button><button data-page="counseling">◌ 상담일지</button>
       <div class="nav-label">입시 기록</div>
-      <button data-page="grades">▥ 내신성적</button><button data-page="mocks">⌁ 모의고사</button><button data-page="records">◇ 생기부·탐구</button><a class="nav-ext" href="subject-design.html" target="_blank" rel="noopener">✎ 선택과목 설계 <span>↗</span></a><button data-page="strategy">◎ 입시전략</button><button data-page="applications">★ 지원·진학결과</button>
+      <button data-page="grades">▥ 내신성적</button><button data-page="mocks">⌁ 모의고사</button><button data-page="records">◇ 생기부·탐구</button><div class="nav-ext-row"><a class="nav-ext" href="subject-design.html" target="_blank" rel="noopener">✎ 선택과목 <span>↗</span></a><a class="nav-ext" href="https://educere8010.github.io/educereapply/" target="_blank" rel="noopener">◇ 원서상담 <span>↗</span></a></div><button data-page="strategy">◎ 입시전략</button><button data-page="applications">★ 지원·진학결과</button>
       <div class="nav-label nav-fold" data-fold="more">더보기 <span class="fold-caret">▸</span></div>
       <div class="fold-group" data-group="more">
-        <button data-page="alerts">⚑ 위험신호</button><button data-page="overview">◈ 전체 진행현황</button><button data-page="exams">▣ 시험일정</button><button data-page="reports">▧ 성장 리포트</button><button data-page="seats">▦ 지정석 현황</button><button data-page="archive">♧ 퇴원생 보관함</button><a class="nav-ext" href="https://educere8010.github.io/educereapply/" target="_blank" rel="noopener">◇ 원서상담앱 열기 <span>↗</span></a>
+        <button data-page="alerts">⚑ 위험신호</button><button data-page="overview">◈ 전체 진행현황</button><button data-page="exams">▣ 시험일정</button><button data-page="reports">▧ 성장 리포트</button><button data-page="seats">▦ 지정석 현황</button><button data-page="archive">♧ 퇴원생 보관함</button>
       </div>
       <div class="nav-label nav-fold" data-fold="settings">설정 <span class="fold-caret">▸</span></div>
       <div class="fold-group" data-group="settings">
