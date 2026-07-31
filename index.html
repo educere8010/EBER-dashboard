@@ -49,11 +49,27 @@
   <aside>
     <div class="brand"><b>EDUCERE</b><small>바른학습관 학생관리</small></div>
     <nav class="nav" id="nav">
-      <button class="active" data-page="dashboard">◫ 종합현황</button><button data-page="students">♙ 재원생 관리</button><button data-page="archive">♧ 퇴원생 보관함</button><button data-page="attendance">✓ 오늘의 출결</button><button data-page="seats">▦ 지정석 현황</button><button data-page="study">▤ 학습계획·점검</button>
-      <div class="nav-label">입시 토탈지원</div><button data-page="student360">◉ 학생 종합기록</button><button data-page="grades">▥ 내신성적</button><button data-page="mocks">⌁ 모의고사</button><button data-page="records">◇ 생기부·탐구</button><button data-page="strategy">◎ 입시전략</button><button data-page="applications">★ 지원·진학결과</button><button data-page="counseling">◌ 상담일지</button>
-      <div class="nav-label">관리 자동화</div><button data-page="alerts">⚑ 위험신호</button><button data-page="tasks">☑ 할 일·알림</button><button data-page="exams">▣ 시험일정</button><button data-page="overview">◈ 전체 진행현황</button>
-      <div class="nav-label">리포트·관리</div><button data-page="reports">▧ 성장 리포트</button><button data-page="kioskSetup">▣ 태블릿 출석설정</button><button data-page="backup">↻ 설정·백업</button>
-      <div class="nav-label">외부 연동</div><a class="nav-ext" href="https://educere8010.github.io/educereapply/" target="_blank" rel="noopener">◇ 원서상담앱 열기 <span>↗</span></a><a class="nav-ext" href="subject-design.html" target="_blank" rel="noopener">✎ 선택과목 설계 열기 <span>↗</span></a>
+      <style>
+        .nav-fold{cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center}
+        .nav-fold:hover{color:#fff}
+        .fold-caret{font-size:11px;opacity:.8}
+        .fold-group{display:none}
+        .fold-group.open{display:block}
+      </style>
+      <div class="nav-label">매일 기록</div>
+      <button class="active" data-page="dashboard">◫ 종합현황</button><button data-page="attendance">✓ 오늘의 출결</button><button data-page="study">▤ 학습계획·점검</button><button data-page="tasks">☑ 할 일·알림</button>
+      <div class="nav-label">학생·상담</div>
+      <button data-page="student360">◉ 학생 종합기록</button><button data-page="students">♙ 재원생 관리</button><button data-page="counseling">◌ 상담일지</button>
+      <div class="nav-label">입시 기록</div>
+      <button data-page="grades">▥ 내신성적</button><button data-page="mocks">⌁ 모의고사</button><button data-page="records">◇ 생기부·탐구</button><a class="nav-ext" href="subject-design.html" target="_blank" rel="noopener">✎ 선택과목 설계 <span>↗</span></a><button data-page="strategy">◎ 입시전략</button><button data-page="applications">★ 지원·진학결과</button>
+      <div class="nav-label nav-fold" data-fold="more">더보기 <span class="fold-caret">▸</span></div>
+      <div class="fold-group" data-group="more">
+        <button data-page="alerts">⚑ 위험신호</button><button data-page="overview">◈ 전체 진행현황</button><button data-page="exams">▣ 시험일정</button><button data-page="reports">▧ 성장 리포트</button><button data-page="seats">▦ 지정석 현황</button><button data-page="archive">♧ 퇴원생 보관함</button><a class="nav-ext" href="https://educere8010.github.io/educereapply/" target="_blank" rel="noopener">◇ 원서상담앱 열기 <span>↗</span></a>
+      </div>
+      <div class="nav-label nav-fold" data-fold="settings">설정 <span class="fold-caret">▸</span></div>
+      <div class="fold-group" data-group="settings">
+        <button data-page="kioskSetup">▣ 태블릿 출석설정</button><button data-page="backup">↻ 설정·백업</button>
+      </div>
     </nav>
     <div class="aside-bottom">4차 클라우드 연결형 · 로컬과 Supabase에 자동 저장됩니다.</div>
   </aside>
@@ -264,6 +280,22 @@ function renderPage(page){let renders={dashboard:renderStats,students:renderStud
 function go(page){let target=$(page),navButton=document.querySelector(`[data-page="${page}"]`);if(!target||!navButton)return;document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x===target));document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x===navButton));$('pageTitle').textContent=navButton.textContent.replace(/^\S+\s/,'');$('app')?.classList.remove('menu');resetPageFilters(page);renderPage(page)}
 function resetPageFilters(page){const clear=(...ids)=>ids.forEach(id=>{let el=$(id);if(el)el.value=''});if(page==='students')clear('studentSearch','gradeFilter');else if(page==='archive')clear('archiveSearch','archiveStatus')}
 $('nav').onclick=e=>{const b=e.target.closest('button');if(b)go(b.dataset.page)};
+(function(){
+  const st=JSON.parse(localStorage.getItem('eberNavFolds')||'{}');
+  document.querySelectorAll('.nav-fold').forEach(l=>{
+    const k=l.dataset.fold,g=document.querySelector('.fold-group[data-group="'+k+'"]');
+    if(!g)return;
+    const apply=o=>{g.classList.toggle('open',o);const c=l.querySelector('.fold-caret');if(c)c.textContent=o?'▾':'▸'};
+    apply(!!st[k]);
+    l.addEventListener('click',()=>{const o=!g.classList.contains('open');apply(o);st[k]=o;localStorage.setItem('eberNavFolds',JSON.stringify(st))});
+  });
+  const _go=go;
+  go=function(p){
+    const nb=document.querySelector('[data-page="'+p+'"]'),grp=nb&&nb.closest('.fold-group');
+    if(grp&&!grp.classList.contains('open')){grp.classList.add('open');const c=document.querySelector('.nav-fold[data-fold="'+grp.dataset.group+'"] .fold-caret');if(c)c.textContent='▾'}
+    _go(p);
+  };
+})();
 function renderAll(){let renders=[renderStats,renderStudents,renderArchive,renderAttendance,renderSeats,renderSelects,renderStudy,renderGrades,renderMocks,renderRecords,renderStrategy,renderApplications,renderCounseling,renderAlerts,renderTasks,renderExams,renderOverview,renderReport,renderKioskSetup];renders.forEach(fn=>{try{fn()}catch(error){console.error((fn.name||'화면')+' 표시 오류',error)}})}
 function renderStats(){const students=activeStudents(),a=students.map(s=>getAtt(s.id));const present=a.filter(x=>['출석','지각'].includes(x.status)).length;const plans=students.filter(s=>getStudies(s.id).length).length;const done=students.flatMap(s=>getStudies(s.id)).filter(x=>x.status==='완료').length;const all=students.flatMap(s=>getStudies(s.id)).length;
  $('stats').innerHTML=[["재원생",students.length,`퇴원·졸업 ${db.students.length-students.length}명`],["오늘 입실",present,`출석률 ${students.length?Math.round(present/students.length*100):0}%`],["학습계획 작성",plans,`미작성 ${students.length-plans}명`],["학습 완료율",all?Math.round(done/all*100)+'%':'0%',`${done}/${all}항목`]].map(x=>`<div class="card stat"><span>${x[0]}</span><strong>${x[1]}</strong><small>${x[2]}</small></div>`).join('');
